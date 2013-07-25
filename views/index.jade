@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+  p XBee Tool
+
+  h2 Config
+    button#configure Configure
+    button#save Save
+    button#reset Reset
+  
+  h2 Network
+    button#join Allow join
+    button#discover Discover
+    button#association Check association
+    
+  h2 Test
+    button#test Test
+
+  h2 Node ID
+  input#id
+  button#idSubmit
+  
+  h2 AT command
+  input#at
+  
+  #log

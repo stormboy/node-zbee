@@ -1,0 +1,33 @@
+{
+  "name": "zbee",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "homepage": "https://github.com/stormboy/node-xbee",
+  "dependencies": {
+    "express": "3.2.x",
+    "jade": "*",
+    "svd-xbee": "git://github.com/stormboy/svd-xbee",
+    "serialport": "1.1.x",
+    "socket.io": "*",
+    "sqlite3": "*",
+    "nedb": "~0.8.4"
+  },
+  "keywords": [
+    "xbee",
+    "sensors",
+    "automation",
+    "control"
+  ],
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stormboy/node-zbee"
+  },
+  "readmeFilename": "README.md"
+  
+}
