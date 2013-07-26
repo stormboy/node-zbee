@@ -5,14 +5,13 @@
   "scripts": {
     "start": "node app.js"
   },
-  "homepage": "https://github.com/stormboy/node-xbee",
+  "homepage": "https://github.com/stormboy/node-zbee",
   "dependencies": {
     "express": "3.2.x",
     "jade": "*",
     "svd-xbee": "git://github.com/stormboy/svd-xbee",
     "serialport": "1.1.x",
     "socket.io": "*",
-    "sqlite3": "*",
     "nedb": "~0.8.4"
   },
   "keywords": [

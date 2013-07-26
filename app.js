@@ -97,6 +97,9 @@ sio.sockets.on('connection', function (socket) {
 			case "association":
 				coordinator.checkAssociation();
 				break;
+			case "queryAddresses":
+				coordinator.queryAddresses();
+				break;
 			case "test":
 				coordinator.test();
 				break;

@@ -24,6 +24,9 @@ $( document ).ready(function() {
     $( "#discover" ).click(function( event ) {
     	socket.emit("command", "discover", {command: "discover", "params": []});
     });
+    $( "#queryAddresses" ).click(function( event ) {
+    	socket.emit("command", "queryAddresses");
+    });
     
     // check ZB node association
     $( "#association" ).click(function( event ) {
