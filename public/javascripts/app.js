@@ -1,8 +1,16 @@
 $( document ).ready(function() {
 	var socket = io.connect('http://localhost');
+
+	// map of address64 to endpoint
+	var nodes = {};
+	
+	// map of _id to endpoint
+	var endpoints = {};
 	
 	socket.on('node', function (data) {
 		console.log("got node: " + JSON.stringify(data));
+		//data.address64
+		
 	    $("#log").append("<div style='margin-top: 10px'>" + JSON.stringify(data) + "</div>");
 
 	});
