@@ -49,23 +49,25 @@ server.listen(app.get('port'), function(){
 // create new XBee HA coordinator
 var coordinator = new Coordinator(config);
 
+// handle ZB coordinator initialisation
 coordinator.on("init", function() {
 	coordinator.getNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
-			console.log("got stored node: " + stringify(node));
+			//console.log("got stored node: " + stringify(node));
 			sio.sockets.emit('node', node);
 		}
 	});
 	coordinator.getApplications(function(err, applications) {
 		for (var i=0; i<applications.length; i++) {
 			var application = applications[i];
-			console.log("got stored application: " + stringify(application));
+			//console.log("got stored application: " + stringify(application));
 			sio.sockets.emit('application', application);
 		}
 	});
 });
 
+// handle node discovery
 coordinator.on("node", function(node) {
 	var spec =   {
 	    remote16   : node.remote16,
@@ -77,6 +79,7 @@ coordinator.on("node", function(node) {
 	sio.sockets.emit('node', spec);
 });
 
+// handle application discovery
 coordinator.on("application", function(application) {
 	if (application.node) {
 		application = application.toSpec();
@@ -84,25 +87,29 @@ coordinator.on("application", function(application) {
 
 	sio.sockets.emit('application', application);
 });
-	
+
+// handle a client socket connection
 sio.sockets.on('connection', function (socket) {
-	console.log('A socket connected!');
-	
+	console.log('A client socket connected!');
+
+	// send nodes to client
 	coordinator.getNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
-			console.log("got stored node: " + stringify(node));
+			//console.log("got stored node: " + stringify(node));
 			socket.emit('node', node);
 		}
 	});
+	// send applications to client
 	coordinator.getApplications(function(err, applications) {
 		for (var i=0; i<applications.length; i++) {
 			var application = applications[i];
-			console.log("got stored application: " + stringify(application));
+			//console.log("got stored application: " + stringify(application));
 			socket.emit('application', application);
 		}
 	});
 
+	// listen for commands fom the client
 	socket.on('command', function (cmd, data) {
 		console.log('I received a command: ', cmd, ', data: ', data);
 		switch (cmd) {
@@ -140,13 +147,16 @@ sio.sockets.on('connection', function (socket) {
 				break;
 		}
 	});
+	
+	// listen for AT command from client
 	socket.on('at', function (command) {
 		console.log('I received a an AT command: ', command);
 		coordinator.at(command);
 	});
-	
+
+	// handle client disconnection
 	socket.on('disconnect', function () {
-		sio.sockets.emit('user disconnected');
+		sio.sockets.emit('client socket disconnected');
 	});
 });
 

@@ -15,6 +15,7 @@
     "nedb": "~0.8.4"
   },
   "keywords": [
+    "zigbee",
     "xbee",
     "sensors",
     "automation",
@@ -27,6 +28,6 @@
     "type": "git",
     "url": "git://github.com/stormboy/node-zbee"
   },
-  "readmeFilename": "README.md"
-  
+  "readmeFilename": "README.md",
+  "license" : "LGPL"
 }
