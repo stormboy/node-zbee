@@ -52,6 +52,18 @@ $( document ).ready(function() {
     $( "#association" ).click(function( event ) {
     	socket.emit("command", "association");
     });
+    $( "#addBinding" ).click(function(event) {
+    	socket.emit("command", "addBinding", {
+    		type : 0x03,	// endpoint destination (not group destination)
+    		sourceAddress : {"dec":[0,19,122,0,0,0,152,207],"hex":"00137a00000098cf"},
+    		// {"dec":[0,19,122,0,0,0,139,67], "hex":"00137a0000008b43"},
+    		sourceEndpoint : 2,
+    		clusterId : 6,
+    		destAddress : {"dec":[0,19,122,0,0,0,182,207],"hex":"00137a000000b6cf"},
+    		destEndpoint : 1
+    	});
+    });
+
     $( "#test" ).click(function( event ) {
     	socket.emit("command", "test");
     });

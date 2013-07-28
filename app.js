@@ -135,6 +135,9 @@ sio.sockets.on('connection', function (socket) {
 			case "test":
 				coordinator.test();
 				break;
+			case "addBinding":
+				coordinator.addBinding(data);
+				break;
 		}
 	});
 	socket.on('at', function (command) {
