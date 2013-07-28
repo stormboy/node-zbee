@@ -7,14 +7,26 @@ $( document ).ready(function() {
 	// map of _id to endpoint
 	var endpoints = {};
 	
-	socket.on('node', function (data) {
-		console.log("got node: " + JSON.stringify(data));
+	socket.on('node', function (spec) {
+		console.log("got node: " + JSON.stringify(spec));
 		//data.address64
 		
-	    $("#log").append("<div style='margin-top: 10px'>" + JSON.stringify(data) + "</div>");
-
+		var existing = nodes[spec.remote64.hex];
+		if (!existing) {
+			nodes[spec.remote64.hex] = spec;
+			$("#nodes").append("<div id='" + spec.remote64.hex + "' style='margin-top: 10px'>" + JSON.stringify(spec) + "</div>");
+		}
 	});
 
+	socket.on('application', function (spec) {
+		console.log("got application: " + JSON.stringify(spec));
+		var existing = endpoints[spec.id];
+		if (!existing) {
+			endpoints[spec.id] = spec;
+			$("#applications").append("<div id='" + spec.id + "' style='margin-top: 10px'>" + JSON.stringify(spec) + "</div>");
+		}
+	});
+	
     $( "#configure" ).click(function( event ) {
     	socket.emit("command", "configure");
     });

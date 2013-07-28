@@ -49,28 +49,60 @@ server.listen(app.get('port'), function(){
 // create new XBee HA coordinator
 var coordinator = new Coordinator(config);
 
+coordinator.on("init", function() {
+	coordinator.getNodes(function(err, nodes) {
+		for (var i=0; i<nodes.length; i++) {
+			var node = nodes[i];
+			console.log("got stored node: " + stringify(node));
+			sio.sockets.emit('node', node);
+		}
+	});
+	coordinator.getApplications(function(err, applications) {
+		for (var i=0; i<applications.length; i++) {
+			var application = applications[i];
+			console.log("got stored application: " + stringify(application));
+			sio.sockets.emit('application', application);
+		}
+	});
+});
+
 coordinator.on("node", function(node) {
-	var data =   {
+	var spec =   {
 	    remote16   : node.remote16,
 	    remote64   : node.remote64,
 	    id         : node.id,
 	    deviceType : node.deviceType
 	};
 	
-	sio.sockets.emit('node', data);
+	sio.sockets.emit('node', spec);
 });
-coordinator.on("init", function(node) {
-	coordinator.getNodes(function(err, nodes) {
-		for (var i=0; i<nodes.length; i++) {
-			var node = nodes[i];
-			console.log("got stored node: " + stringify(node));
-		}
-	});
+
+coordinator.on("application", function(application) {
+	if (application.node) {
+		application = application.toSpec();
+	}
+
+	sio.sockets.emit('application', application);
 });
 	
 sio.sockets.on('connection', function (socket) {
 	console.log('A socket connected!');
 	
+	coordinator.getNodes(function(err, nodes) {
+		for (var i=0; i<nodes.length; i++) {
+			var node = nodes[i];
+			console.log("got stored node: " + stringify(node));
+			socket.emit('node', node);
+		}
+	});
+	coordinator.getApplications(function(err, applications) {
+		for (var i=0; i<applications.length; i++) {
+			var application = applications[i];
+			console.log("got stored application: " + stringify(application));
+			socket.emit('application', application);
+		}
+	});
+
 	socket.on('command', function (cmd, data) {
 		console.log('I received a command: ', cmd, ', data: ', data);
 		switch (cmd) {

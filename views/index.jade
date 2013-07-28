@@ -1,22 +1,23 @@
 extends layout
 
 block content
-  h1= title
-  p XBee Tool
+  h1 #{title} XBee Tool
 
   h2 Config
+  #config
     button#configure Configure
     button#save Save
     button#reset Reset
   
   h2 Network
+  #network
     button#join Allow join
     button#discover Discover
     button#queryAddresses Query Addresses
     button#association Check association
     
   h2 Test
-    button#test Test
+  button#test Test
 
   h2 Node ID
   input#id
@@ -25,4 +26,7 @@ block content
   h2 AT command
   input#at
   
-  #log
+  h2 Nodes
+  #nodes
+  h2 Applications
+  #applications
