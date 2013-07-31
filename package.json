@@ -29,5 +29,6 @@
     "url": "git://github.com/stormboy/node-zbee"
   },
   "readmeFilename": "README.md",
-  "license" : "LGPL"
+  "license" : "LGPL",
+  "scripts": {"start": "node app.js"}
 }

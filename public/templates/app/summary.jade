@@ -1,0 +1,29 @@
+.container
+  h3 #{deviceName}
+  .row
+    .col-4 Address:
+    .col-8 #{address16} #{endpoint}
+  .row
+    .col-4 Profile
+    .col-8= profileId
+  .row
+    .col-4 Device
+    .col-2 #{deviceId} 
+    .col-4 #{deviceName}
+    .col-2 (version #{deviceVersion})
+
+  h4 inputs
+  .inputs
+    each cluster in inputClusters
+      .row.input
+        .col-2
+        .col-4.id= cluster.id
+        .col-4.name= cluster.name
+  h4 outputs
+  .outputs
+    each cluster in outputClusters
+      .row.output
+        .col-2
+        .col-4.id= cluster.id
+        .col-4.name= cluster.name
+    

@@ -2,9 +2,37 @@ doctype 5
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src="javascripts/lib/jquery-1.9.1.min.js")
-    script(src="/socket.io/socket.io.js")
-    script(src="javascripts/app.js")
+    script(data-main="javascripts/main", src="javascripts/lib/require.js")
+    
   body
-    block content
+    .container
+      .header.row
+        .masthead.col-10.col-offset-1
+          ul(class="nav nav-pills pull-right")
+            // if (path != "/")
+            li
+              a(href="#{basepath}#panel")
+                img(src="http://placehold.it/60x60/", alt="")
+                div Panel
+            li
+              a(href="#{basepath}#admin") 
+                img(src="http://placehold.it/60x60/", alt="")
+                div Admin
+            li
+              a(href="#{basepath}#nodes") 
+                img(src="http://placehold.it/60x60/", alt="")
+                div Nodes
+            li
+              a(href="#{basepath}#apps") 
+                img(src="http://placehold.it/60x60/", alt="")
+                div Apps
+
+          a(href="#{basepath}/")
+            //- img.logo(src="#{basepath}/images/logo.png")
+            img.logo(src="http://placehold.it/260x80/")
+
+      .content.row
+        .col-10.col-offset-1
+          block content

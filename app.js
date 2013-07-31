@@ -18,11 +18,12 @@ var Coordinator = require("./lib/coordinator").Coordinator;
 
 var app = express();
 
+app.locals.basepath = config.basePath;  // set basepath variable
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -86,6 +87,13 @@ coordinator.on("application", function(application) {
 	}
 
 	sio.sockets.emit('application', application);
+});
+
+coordinator.zbee.on("lifecycle", function(address64, state) {
+	sio.sockets.emit('lifecycle', {
+		address64 : address64,
+		state : state,
+	});
 });
 
 // handle a client socket connection
