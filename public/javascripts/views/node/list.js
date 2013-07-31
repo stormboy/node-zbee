@@ -10,30 +10,23 @@ function($, _, Backbone, NodeListTemplate, NodeView) {
 		initialize : function(options) {
 			this.collection = options.collection;
 			
-			console.log("initialising Node List view");
+			//console.log("initialising Node List view");
 		      
 			var self = this;
 			this._nodeViews = [];
 			this.collection.each(function(node) {
-		    	  console.log("rendering node: " + node);
-		    	  self._nodeViews.push(new NodeView({
-			          model : node
-		    	  }));
+		    	self._nodeViews.push(new NodeView({ model : node }));
 			});
 			this.collection.on("add", function(node) {
-				console.log("adding node view: " + node);
 				self._handleNodeAdded(node);
 			});
 			this.collection.on("remove", function(node) {
-				console.log("removing node view: " + node);
 				self._handleNodeRemoved(node);
 			});
 			this.collection.on("change", function(node) {
-				console.log("updating node view: " + node);
 				self._handleNodeChanged(node);
 			});
 			this.collection.on("reset", function(nodes) {
-				console.log("resetting node views: " + nodes);
 				self._handleNodesReset(nodes);
 			});
 
@@ -48,25 +41,23 @@ function($, _, Backbone, NodeListTemplate, NodeView) {
 		render: function () { 
 			var compiledTemplate = NodeListTemplate(this.model);
 			this.$el.html(compiledTemplate);
+			this.$nodesElement = this.$el.find(".nodes");
 			
 			var self = this;
-			this.$el.empty();
+			this.$nodesElement.empty();
 			
 			// Render each sub-view and append it to the parent view's element.
 			_(this._nodeViews).each(function(nodeView) {
-				$(self.el).append(nodeView.render().el);
+				self.$nodesElement.append(nodeView.render().el);
 			});
 
 			return this;
 		},
 		
 		_handleNodeAdded: function(node) {
-			var nodeView = new NodeView({
-				model : node,
-				tagName : 'li'
-			});
+			var nodeView = new NodeView({ model : node });
 			this._nodeViews.push(nodeView);
-			this.$el.append(nodeView.render().el);
+			this.$nodesElement.append(nodeView.render().el);
 		},
 		
 		_handleNodeRemoved: function(node) {
@@ -84,15 +75,13 @@ function($, _, Backbone, NodeListTemplate, NodeView) {
 			this._nodeViews = [];
 			this.collection.each(function(node) {
 		    	  console.log("rendering node: " + node);
-		    	  self._nodeViews.push(new NodeView({
-			          model : node,
-		    	  }));
+		    	  self._nodeViews.push(new NodeView({ model : node }));
 			});
 
-			this.$el.empty();
+			this.$nodesElement.empty();
 			_(this._nodeViews).each(function(nodeView) {
 				// Render each sub-view and append it to the parent view's element.
-				self.$el.append(nodeView.render().el);
+				self.$nodesElement.append(nodeView.render().el);
 			});
 		},
 	});

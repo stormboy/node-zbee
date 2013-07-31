@@ -29,11 +29,4 @@ require.config({
 require(["app"], function(App) {
 	console.log("initialising app");
 	App.initialize();
-	window.app = App;
-	
-	setTimeout(function () {
-		console.log("window.app: " + 
-				window.app.socket + " " + window.app.test
-			);
-	}, 2000);
 });

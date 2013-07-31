@@ -23,11 +23,7 @@ function($, _, Backbone, Models, Views) {
 			options.socket.on('application', function (spec) {
 				self.apps.add(spec);
 			});
-			
-//			this.nodes.on('add', function(node) {
-//				console.log("node added to collection: " + JSON.stringify(node));
-//			});
-			
+
 			this.nodeListView = new Views.NodeListView({collection: this.nodes});
 			this.appListView = new Views.AppListView({collection: this.apps});
 		},
@@ -124,9 +120,6 @@ function($, _, Backbone, Models, Views) {
 //			app_router.vendorListView.loadResults(q);
 //		});
     	  
-
-
-		
         console.log("routes initialised");
         Backbone.history.start();
       });

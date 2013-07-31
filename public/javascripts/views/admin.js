@@ -8,8 +8,8 @@ function($, _, Backbone, AdminTemplate) {
 		//el : $("#content"),
 
 		initialize : function() {
-		      console.log("initialising Admin view");
-		      this.render();
+			//console.log("initialising Admin view");
+			this.render();
 		},
 		
 		model : {

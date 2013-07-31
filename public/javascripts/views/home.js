@@ -8,7 +8,7 @@ function($, _, Backbone, HomeTemplate) {
 		//el : $("#content"),
 
 		initialize : function() {
-		      console.log("initialising home view");
+			//console.log("initialising home view");
 		},
 		
 		model : {

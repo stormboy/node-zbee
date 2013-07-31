@@ -8,7 +8,7 @@ define(['jquery',
    		//el : $("#content"),
 
    		initialize : function() {
-   		      console.log("initialising App view");
+   			//console.log("initialising App view");
    		},
    		
    		model : {

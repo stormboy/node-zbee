@@ -8,7 +8,7 @@ function($, _, Backbone, PanelTemplate) {
 		//el : $("#content"),
 
 		initialize : function() {
-		      console.log("initialising Panel view");
+			//console.log("initialising Panel view");
 		},
 		
 		model : {
