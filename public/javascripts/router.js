@@ -24,6 +24,17 @@ function($, _, Backbone, Models, Views) {
 				self.apps.add(spec);
 			});
 
+			options.socket.on('explicit', function (packet) {
+				console.log("got message: " + JSON.stringify(packet));
+				// TODO route message to appropriate app
+				var id = packet.remote64.hex + ".0" + packet.sourceEndpoint;
+				console.log("id: " + id);
+				var app = self.apps.get(id);
+				if (app) {
+					console.log("matched app: " + JSON.stringify(app.toJSON()));
+				}
+			});
+			
 			this.nodeListView = new Views.NodeListView({collection: this.nodes});
 			this.appListView = new Views.AppListView({collection: this.apps});
 		},

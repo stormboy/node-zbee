@@ -20,8 +20,17 @@ define(['jquery',
    			this.$el.html(compiledTemplate);
    			return this;
    		},
+   		
+		events: { 
+			"click .identify"      : "doIdentify",
+		},
+		
+		doIdentify: function(event) {
+			socket.emit("command", "identify", { address64: this.model.get("address64"), endpoint: this.model.get("endpoint") });
+		},
+
    	});
-   	
+   
    	return AppView;
 });
 

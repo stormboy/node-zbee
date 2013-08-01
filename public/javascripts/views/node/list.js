@@ -8,10 +8,6 @@ function($, _, Backbone, NodeListTemplate, NodeView) {
 	var NodeListView = Backbone.View.extend({
 
 		initialize : function(options) {
-			this.collection = options.collection;
-			
-			//console.log("initialising Node List view");
-		      
 			var self = this;
 			this._nodeViews = [];
 			this.collection.each(function(node) {

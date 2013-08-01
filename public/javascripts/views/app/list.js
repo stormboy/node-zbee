@@ -5,11 +5,12 @@ define([ 'jquery',
 		'views/app/summary' ], 
 function($, _, Backbone, AppListTemplate, AppView) {
 	
+	/**
+	 * Should be passed an AppCollection when creating
+	 */
 	var AppListView = Backbone.View.extend({
-		//el : $("#content"),
 
 		initialize : function() {
-		      //console.log("initialising App List view");
 		      var self = this;
 		      this._appViews = [];
 		      this.collection.each(function(node) {
@@ -30,7 +31,7 @@ function($, _, Backbone, AppListTemplate, AppView) {
 
 		      this.render();
 		},
-		
+
 		model : {
 			title : "Hello"
 		},
@@ -38,13 +39,12 @@ function($, _, Backbone, AppListTemplate, AppView) {
 		render: function () { 
 			var compiledTemplate = AppListTemplate(this.model);
 			this.$el.html(compiledTemplate);
-			this.$appsElement = this.$el.find(".apps");
+			this.$appsElement = this.$el.find(".apps");	// determine the "apps" element in the view
 
 			var self = this;
-			self.$appsElement.empty();
-			
-			// Render each sub-view and append it to the parent view's element.
+			this.$appsElement.empty();
 			_(this._appViews).each(function(appView) {
+				// Render each sub-view and append it to the parent view's element.
 				self.$appsElement.append(appView.render().el);
 			});
 			

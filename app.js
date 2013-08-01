@@ -70,23 +70,22 @@ coordinator.on("init", function() {
 
 // handle node discovery
 coordinator.on("node", function(node) {
-	var spec =   {
-	    remote16   : node.remote16,
-	    remote64   : node.remote64,
-	    id         : node.id,
-	    deviceType : node.deviceType
-	};
-	
-	sio.sockets.emit('node', spec);
+	sio.sockets.emit('node', node.toDesc());
+	sio.sockets.emit('nodeHealth', { address64: node.remote64.hex, status: "alive" });
 });
 
 // handle application discovery
 coordinator.on("application", function(application) {
-	if (application.node) {
-		application = application.toSpec();
+	if (application) {
+		
+		if (application.node) {
+			application = application.toSpec();
+		}
+		sio.sockets.emit('application', application);
 	}
-
-	sio.sockets.emit('application', application);
+	else {
+		console.log("why no application object??");
+	}
 });
 
 coordinator.zbee.on("lifecycle", function(address64, state) {
@@ -94,6 +93,20 @@ coordinator.zbee.on("lifecycle", function(address64, state) {
 		address64 : address64,
 		state : state,
 	});
+});
+
+/**
+ * cluster message
+ */
+//coordinator.on("explicit", function(message) {
+//	sio.sockets.emit("explicit", message);
+//});
+
+/**
+ * Report on cluster attributes
+ */
+coordinator.on("attributeReport", function(message) {
+	sio.sockets.emit("attributeReport", message);
 });
 
 // handle a client socket connection
@@ -123,6 +136,7 @@ sio.sockets.on('connection', function (socket) {
 		switch (cmd) {
 			case "id":
 				coordinator.setId(data);
+				break;
 			case "configure":
 				coordinator.configure();
 				break;
@@ -144,14 +158,25 @@ sio.sockets.on('connection', function (socket) {
 			case "association":
 				coordinator.checkAssociation();
 				break;
-			case "queryAddresses":
-				coordinator.queryAddresses();
-				break;
 			case "test":
 				coordinator.test();
 				break;
+				
+			case "queryAddresses":
+				coordinator.queryAddresses();
+				break;
+				
+			case "identify":
+				coordinator.identifyNode(data.address64, data.endpoint);
+				break;
 			case "addBinding":
 				coordinator.addBinding(data);
+				break;
+			case "discoverAttributes":
+				coordinator.discoverAttributes(data.address64, data.endpoint, data.clusterId, data.start, data.max);
+				break;
+			case "configReporting":
+				coordinator.configReporting(data.address64, data);
 				break;
 		}
 	});

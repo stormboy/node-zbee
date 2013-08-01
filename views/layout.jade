@@ -7,32 +7,26 @@ html
     script(data-main="javascripts/main", src="javascripts/lib/require.js")
     
   body
+    .navbar.navbar-static-top
+        a.navbar-brand(href="#{basepath}/")
+          span.glyphicon.glyphicon-dashboard.icon-large ZBee
+        .nav-collapse.collapse.navbar-responsive-collapse
+          ul.nav.navbar-nav.pull-right
+              li
+                a(href="#{basepath}#panel")
+                  | Panel
+              li
+                a(href="#{basepath}#apps") 
+                  | Apps
+              li
+                a(href="#{basepath}#nodes") 
+                  | Nodes
+              li
+                a(href="#{basepath}#admin") 
+                  | Admin
+
+
     .container
-      .header.row
-        .masthead.col-10.col-offset-1
-          ul(class="nav nav-pills pull-right")
-            // if (path != "/")
-            li
-              a(href="#{basepath}#panel")
-                img(src="http://placehold.it/60x60/", alt="")
-                div Panel
-            li
-              a(href="#{basepath}#apps") 
-                img(src="http://placehold.it/60x60/", alt="")
-                div Apps
-            li
-              a(href="#{basepath}#nodes") 
-                img(src="http://placehold.it/60x60/", alt="")
-                div Nodes
-            li
-              a(href="#{basepath}#admin") 
-                img(src="http://placehold.it/60x60/", alt="")
-                div Admin
-
-          a(href="#{basepath}/")
-            //- img.logo(src="#{basepath}/images/logo.png")
-            img.logo(src="http://placehold.it/260x80/")
-
       .content.row
         .col-10.col-offset-1
           block content

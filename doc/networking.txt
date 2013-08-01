@@ -1,0 +1,41 @@
+
+Setting up a network
+====================
+
+Join Network
+------------
+Allow nodes to physically join the same network
+
+- send "Allow Join" on device already in the network, e.g. coordinator.
+- commission device - may be factory reset, power-on, or button sequence 
+
+Discover devices
+----------------
+
+Nodes will announce themselves
+- store node address
+- get node descriptions
+
+Get active endpoints
+- Send "Active Endpoints Request" to each node discovered.
+
+For each endpoint:
+- Send "Simple Descriptor" request to get details such as input and output clusters
+
+
+Bind devices
+------------
+To enable output cluster to send commands to input cluster.
+
+- Send "Binding Request" to source (output) endpoint to send messages to destination (input) endpoint.
+
+
+Configure reporting
+-------------------
+To be notified of change of attribute states in a cluster
+
+- send "Configure Reporting" request to node|endpoint|cluster|attributeId
+
+- send "Bind Request" to the cluster to set the destination for reporting.
+
+Messages will be delivered to the destination of bindings

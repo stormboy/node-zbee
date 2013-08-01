@@ -1,8 +1,11 @@
-.container
+.container.summary
   h3 #{deviceName}
   .row
     .col-4 Address:
-    .col-8 #{address16} #{endpoint}
+    if locals.address64
+      .col-8 #{address64} (#{address16}) #{endpoint}
+    else 
+      .col-8 (#{address16}) #{endpoint}
   .row
     .col-4 Profile
     .col-8= profileId
@@ -19,6 +22,8 @@
         .col-2
         .col-4.id= cluster.id
         .col-4.name= cluster.name
+        .col-2
+          button(enabled="false") bind...
   h4 outputs
   .outputs
     each cluster in outputClusters
@@ -26,4 +31,7 @@
         .col-2
         .col-4.id= cluster.id
         .col-4.name= cluster.name
+        .col-2
+          button(enabled="false") bind...
     
+  button.identify identify
