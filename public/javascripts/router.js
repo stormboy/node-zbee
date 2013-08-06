@@ -20,7 +20,7 @@ function($, _, Backbone, Models, Views) {
 				self.nodes.add(spec);
 			});
 			
-			options.socket.on('application', function (spec) {
+			options.socket.on('device', function (spec) {
 				self.apps.add(spec);
 			});
 

@@ -20,18 +20,22 @@
     each cluster in inputClusters
       .row.input
         .col-2
-        .col-4.id= cluster.id
+        .col-2.id 0x#{cluster.id.toString(16)}
         .col-4.name= cluster.name
-        .col-2
+        .col-4
+          //- listener / un-listen
+          button listen
           button(enabled="false") bind...
   h4 outputs
   .outputs
     each cluster in outputClusters
       .row.output
         .col-2
-        .col-4.id= cluster.id
+        .col-2.id 0x#{cluster.id.toString(16)}
         .col-4.name= cluster.name
-        .col-2
+        .col-4
+          //- listener / un-listen
+          button listen
           button(enabled="false") bind...
-    
+
   button.identify identify

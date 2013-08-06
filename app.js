@@ -44,7 +44,7 @@ var sio = io.listen(server);
 sio.set('log level', 2);
 
 server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  console.log('Zigbee manager server listening on port ' + app.get('port'));
 });
 
 // create new XBee HA coordinator
@@ -59,11 +59,11 @@ coordinator.on("init", function() {
 			sio.sockets.emit('node', node);
 		}
 	});
-	coordinator.getApplications(function(err, applications) {
+	coordinator.getDevices(function(err, applications) {
 		for (var i=0; i<applications.length; i++) {
 			var application = applications[i];
 			//console.log("got stored application: " + stringify(application));
-			sio.sockets.emit('application', application);
+			sio.sockets.emit('device', application);
 		}
 	});
 });
@@ -71,17 +71,17 @@ coordinator.on("init", function() {
 // handle node discovery
 coordinator.on("node", function(node) {
 	sio.sockets.emit('node', node.toDesc());
-	sio.sockets.emit('nodeHealth', { address64: node.remote64.hex, status: "alive" });
+	sio.sockets.emit('lifecycle', { address64: node.remote64.hex, state: "alive" });
 });
 
-// handle application discovery
-coordinator.on("application", function(application) {
+// handle devices/application-object discovery
+coordinator.on("device", function(application) {
 	if (application) {
 		
 		if (application.node) {
 			application = application.toSpec();
 		}
-		sio.sockets.emit('application', application);
+		sio.sockets.emit('device', application);
 	}
 	else {
 		console.log("why no application object??");
@@ -117,16 +117,14 @@ sio.sockets.on('connection', function (socket) {
 	coordinator.getNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
-			//console.log("got stored node: " + stringify(node));
 			socket.emit('node', node);
 		}
 	});
 	// send applications to client
-	coordinator.getApplications(function(err, applications) {
+	coordinator.getDevices(function(err, applications) {
 		for (var i=0; i<applications.length; i++) {
 			var application = applications[i];
-			//console.log("got stored application: " + stringify(application));
-			socket.emit('application', application);
+			socket.emit('device', application);
 		}
 	});
 
@@ -134,50 +132,72 @@ sio.sockets.on('connection', function (socket) {
 	socket.on('command', function (cmd, data) {
 		console.log('I received a command: ', cmd, ', data: ', data);
 		switch (cmd) {
-			case "id":
-				coordinator.setId(data);
-				break;
-			case "configure":
-				coordinator.configure();
-				break;
-			case "save":
-				coordinator.save();
-				break;
-			case "reset":
-				coordinator.reset();
-				break;
-			case "join":
-				coordinator.allowJoin();
-				break;
-			case "leave":
-				coordinator.leave();
-				break;
-			case "discover":
-				coordinator.discover();
-				break;
-			case "association":
-				coordinator.checkAssociation();
-				break;
-			case "test":
-				coordinator.test();
-				break;
-				
-			case "queryAddresses":
-				coordinator.queryAddresses();
-				break;
-				
-			case "identify":
-				coordinator.identifyNode(data.address64, data.endpoint);
-				break;
-			case "addBinding":
-				coordinator.addBinding(data);
-				break;
-			case "discoverAttributes":
-				coordinator.discoverAttributes(data.address64, data.endpoint, data.clusterId, data.start, data.max);
-				break;
-			case "configReporting":
-				coordinator.configReporting(data.address64, data);
-				break;
+		
+		case "discover":
+			// Discover Zigbee nodes and Zigbee devices on the network.
+			// Not yet implemented properly
+			coordinator.discover();
+			break;
+			
+		case "discoverNodeEndpoints":
+			// make a Zigbee devices notify itself
+			coordinator.discoverNodeEndpoints(data.address64);
+			break;
+			
+		case "identify":
+			// make a Zigbee devices notify itself
+			coordinator.identifyDevice(data.address64, data.endpoint);
+			break;
+			
+		case "configReporting":
+			// configure reporting of attributes to the local node
+			coordinator.configReporting(data.address64, data);
+			break;
+			
+		case "addBinding":
+			// add binding between clusters on different ZigBee devices.
+			coordinator.addBinding(data);
+			break;
+			
+		case "discoverAttributes":
+			// Find attributes on a particular cluster
+			coordinator.discoverAttributes(data.address64, data.endpoint, data.clusterId, data.start, data.max);
+			break;
+
+		case "configure":
+			// Configure the XBee for HA
+			coordinator.configure();
+			break;
+		case "save":
+			// Write XBee settings to flash
+			coordinator.save();
+			break;
+		case "reset":
+			// Reset XBee settings to factory default
+			coordinator.reset();
+			break;
+			
+		case "join":
+			// Allow new nodes to join the network.
+			coordinator.allowJoin();
+			break;
+		case "leave":
+			// Make the Zbee leave the network
+			coordinator.leave();
+			break;
+			
+		case "association":
+			// Check the network association state on the local Node.
+			coordinator.checkAssociation();
+			break;
+			
+		case "test":
+			coordinator.test();
+			break;
+			
+		case "queryAddresses":
+			coordinator.queryAddresses();
+			break;
 		}
 	});
 	
