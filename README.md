@@ -99,15 +99,15 @@ e.g. zbee.addNode(ZigbeeNode);
 - subscribe 
 	- report on cluster attributes
 
-####TODO
-- groups
-- scenes
-
 ####Events
 - node
 - deviceFound
 - deviceUpdated
 - attributeReport
+
+####TODO
+- groups
+- scenes
 
 ###ZigbeeNode
 

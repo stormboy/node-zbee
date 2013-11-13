@@ -24,8 +24,8 @@
         .col-4.name= cluster.name
         .col-4
           //- listener / un-listen
-          button listen
-          button(enabled="false") bind...
+          button.listen(id="listen-#{cluster.id}") listen
+          button.bind(id="bind-#{cluster.id}") bind...
   h4 outputs
   .outputs
     each cluster in outputClusters
@@ -35,7 +35,7 @@
         .col-4.name= cluster.name
         .col-4
           //- listener / un-listen
-          button listen
-          button(enabled="false") bind...
+          button.listen(id="listen-#{cluster.id}") listen
+          button.bind(id="bind-#{cluster.id}") bind...
 
   button.identify identify

@@ -24,10 +24,14 @@ function($, _, Backbone, NodeTemplate) {
 		
 		events: { 
 			"click .identify"      : "doIdentify",
+			"click .discover"      : "doDiscover",
 		},
 		
 		doIdentify: function(event) {
 			socket.emit("command", "identify", { address64: this.model.get("address64"), endpoint: 1 });
+		},
+		doDiscover: function(event) {
+			socket.emit("command", "discoverNodeEndpoints", { address64: this.model.get("address64") });
 		},
 	});
 	

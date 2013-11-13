@@ -52,18 +52,18 @@ var coordinator = new Coordinator(config);
 
 // handle ZB coordinator initialisation
 coordinator.on("init", function() {
-	coordinator.getNodes(function(err, nodes) {
+	coordinator.getStoredNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
 			//console.log("got stored node: " + stringify(node));
 			sio.sockets.emit('node', node);
 		}
 	});
-	coordinator.getDevices(function(err, applications) {
-		for (var i=0; i<applications.length; i++) {
-			var application = applications[i];
-			//console.log("got stored application: " + stringify(application));
-			sio.sockets.emit('device', application);
+	coordinator.getStoredDevices(function(err, devices) {
+		for (var i=0; i<devices.length; i++) {
+			var device = devices[i];
+			//console.log("got stored device: " + stringify(device));
+			sio.sockets.emit('device', device);
 		}
 	});
 });
@@ -75,16 +75,16 @@ coordinator.on("node", function(node) {
 });
 
 // handle devices/application-object discovery
-coordinator.on("device", function(application) {
-	if (application) {
+coordinator.on("device", function(device) {
+	if (device) {
 		
-		if (application.node) {
-			application = application.toSpec();
+		if (device.node) {
+			device = device.toSpec();
 		}
-		sio.sockets.emit('device', application);
+		sio.sockets.emit('device', device);
 	}
 	else {
-		console.log("why no application object??");
+		console.log("why no device/application object??");
 	}
 });
 
@@ -114,23 +114,24 @@ sio.sockets.on('connection', function (socket) {
 	console.log('A client socket connected!');
 
 	// send nodes to client
-	coordinator.getNodes(function(err, nodes) {
+	coordinator.getStoredNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
 			socket.emit('node', node);
 		}
 	});
-	// send applications to client
-	coordinator.getDevices(function(err, applications) {
-		for (var i=0; i<applications.length; i++) {
-			var application = applications[i];
-			socket.emit('device', application);
+	// send devices to client
+	coordinator.getStoredDevices(function(err, devices) {
+		for (var i=0; i<devices.length; i++) {
+			var device = devices[i];
+			socket.emit('device', device);
 		}
 	});
 
-	// listen for commands fom the client
+	// listen for commands from the client
 	socket.on('command', function (cmd, data) {
-		console.log('I received a command: ', cmd, ', data: ', data);
+		console.log('received command: ', cmd, ', data: ', data);
+		
 		switch (cmd) {
 		
 		case "discover":
@@ -197,6 +198,60 @@ sio.sockets.on('connection', function (socket) {
 			
 		case "queryAddresses":
 			coordinator.queryAddresses();
+			break;
+		}
+	});
+	
+	// node setup
+	socket.on('node', function (nodeAddress, cmd, data) {
+		console.log('received node command: ' + nodeAddress + " : " + cmd + ' : ', data);
+		switch (cmd) {
+
+		// configure reporting for attribute (node,endpoint,cluster,attributeId)
+		case "report":
+			coordinator.configReporting();
+			
+			// lookup node
+			// get cluster
+			var node = coordinator.getNode(nodeAddress);
+			if (node) {
+				console.log("got node, now getting cluster")
+				node.devices[endpoint];
+				node.getDevice(endpoint);
+			}
+			break;
+
+		case "unreport":
+			break;
+			
+		case "bind":
+			var binding = data;
+//			 var binding = {
+//				sourceAddress: byte[8]
+//				sourceEndpoint: int(1)
+//				clusterId: int(2)
+//				type: BindingType
+//				destAddress: byte[8]
+//				destEndpoint: int(1)
+//			};
+			coordinator.addBinding(binding);
+
+			//node.zdo.requestBind(binding);
+
+			break;
+			
+		case "unbind":
+			break;
+		}
+	});
+
+	// node|endpoint|cluster : method, 
+	socket.on('facet', function (nodeAddress, facet, method, args) {
+		console.log('received facet message: ', nodeAddress + ': ' + data);
+		
+		switch (cmd) {
+		
+		case "value":
 			break;
 		}
 	});

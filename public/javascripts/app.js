@@ -29,10 +29,10 @@ function($, Backbone, Router, io) {
 					nodes[spec.remote64.hex] = spec;
 				}
 			});
-			socket.on('application', function (spec) {
+			socket.on('device', function (spec) {
 				var existing = endpoints[spec.id];
 				if (!existing) {
-					console.log("got app: " + JSON.stringify(spec));
+					console.log("got device: " + JSON.stringify(spec));
 					endpoints[spec.id] = spec;
 				}
 			});

@@ -23,11 +23,49 @@ define(['jquery',
    		
 		events: { 
 			"click .identify"      : "doIdentify",
+			"click .listen"      : "doListen",
+			"click .bind"      : "doBind",
 		},
 		
 		doIdentify: function(event) {
 			socket.emit("command", "identify", { address64: this.model.get("address64"), endpoint: this.model.get("endpoint") });
 		},
+		
+		doListen: function(event) {
+			var sender = (event && event.target) || (window.event && window.event.srcElement);
+			var clusterId = sender.id.substring(7);
+
+	    	socket.emit("command", "configReporting", {
+	    		address64 : this.model.get("address64"),
+	    		endpoint : this.model.get("endpoint"),
+	    		clusterId : clusterId,
+	    		configs : [{
+		    		direction: 0x00,
+		    		id: 0x0000,
+		    		type: 0x10,		// boolean
+		    		minInterval: 0x0000,
+		    		maxInterval: 0x0000,
+		    		//change: [0x00]		// only for analog types
+		    	}]
+		    });
+
+		},
+		
+		doBind: function(event) {
+			var sender = (event && event.target) || (window.event && window.event.srcElement);
+			var clusterId = sender.id.substring(5);
+
+			// TODO prompt for target 
+	    	socket.emit("command", "addBinding", {
+	    		type : 0x03,	// endpoint destination (not group destination)
+	    		sourceAddress : this.model.get("address64"),
+	    		sourceEndpoint : this.model.get("endpoint"),
+	    		clusterId : clusterId,
+	    		destAddress : "0013a20040770e87", // coordinator
+	    		destEndpoint : 1
+	    	});
+
+		}
 
    	});
    
