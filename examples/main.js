@@ -1,4 +1,4 @@
-var config = require("../config.json");
+var config = require("../config.js");
 var util = require('util');
 var XBee = require('svd-xbee').XBee;
 
