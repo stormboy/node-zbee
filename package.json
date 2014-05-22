@@ -9,7 +9,7 @@
   "dependencies": {
     "express": "3.2.x",
     "jade": "*",
-    "svd-xbee": "git://github.com/stormboy/svd-xbee",
+    "svd-xbee": "git://github.com/stormboy/svd-xbee.git",
     "serialport": "1.1.x",
     "socket.io": "*",
     "nedb": "~0.8.4"

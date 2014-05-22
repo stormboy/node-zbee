@@ -52,6 +52,7 @@ var coordinator = new Coordinator(config);
 
 // handle ZB coordinator initialisation
 coordinator.on("init", function() {
+	console.log("--- received init from coordinator");
 	coordinator.getStoredNodes(function(err, nodes) {
 		for (var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
